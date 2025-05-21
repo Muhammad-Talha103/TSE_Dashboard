@@ -5,36 +5,8 @@ import {
 } from "@/utils/lib";
 import React from "react";
 import StorageSpeedometer from "./StorageDetails";
+import {Token , TSEDetail , TSEData , StorageMetrics , Stat} from "@/types/dashboard";
 
-// Define types for the structures used in the component
-interface Token {
-  creditClientId: string | null;
-  state: "active" | "terminated";
-}
-
-interface TSEDetail {
-  storageCapacity: number | null;
-  storageUsed: number | null;
-}
-
-interface TSEData {
-  tseSerialNumber: string;
-  creditClientId: string;
-  detail: TSEDetail;
-}
-
-interface StorageMetrics {
-  totalCapacity: number;
-  totalUsed: number;
-  devicesWithStorageData: number;
-  totalDevices: number;
-}
-
-interface Stat {
-  title: string;
-  value: number;
-  description: string;
-}
 
 const Dashboard_Overview: React.FC = async () => {
   const tokens: Token[] = await getCreditTokens();
@@ -53,7 +25,7 @@ const Dashboard_Overview: React.FC = async () => {
     })
   );
 
-  // Extract serial numbers and get detailed token data
+
   const tseDetails: (TSEData | null)[] = await Promise.all(
     activeTSEss
       .filter(Boolean)
@@ -68,17 +40,16 @@ const Dashboard_Overview: React.FC = async () => {
       })
   );
 
-  // Filter out failed requests
   const validTseDetails: TSEData[] = tseDetails.filter(Boolean) as TSEData[];
 
   const storageMetrics: StorageMetrics = validTseDetails.reduce(
     (acc, { detail }) => {
-      // Check if storage capacity exists and is a number
+
       if (typeof detail.storageCapacity === "number") {
         acc.totalCapacity += detail.storageCapacity;
       }
 
-      // Check if storage used exists and is a number
+      
       if (typeof detail.storageUsed === "number") {
         acc.totalUsed += detail.storageUsed;
       }
@@ -105,6 +76,7 @@ const Dashboard_Overview: React.FC = async () => {
   const availableStorage =
     storageMetrics.totalCapacity - storageMetrics.totalUsed;
 
+    console.log("Available Storage: ", availableStorage);
   const stats: Stat[] = [
     {
       title: "Credit Tokens",

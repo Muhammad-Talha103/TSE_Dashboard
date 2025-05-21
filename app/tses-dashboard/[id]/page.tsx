@@ -24,7 +24,7 @@ async function getTSEDetails(tseSerialNumber: string) {
 
 const TSEPage = async ({ params }: Props) => {
   const { id } = await params;
-  const tseData = await getTSEDetails(id); // 👈 Fetch data using the slug
+  const tseData = await getTSEDetails(id); 
 
   return (
     <AuthWrapper>

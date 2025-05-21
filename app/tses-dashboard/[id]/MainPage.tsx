@@ -24,28 +24,7 @@ import {
   FiBarChart2,
   FiPieChart,
 } from "react-icons/fi";
-
-
-interface ProductTypeUsage {
-  signatureLimit: number;
-  signaturesCurrentMonth: number;
-  signatureDuration: number;
-  slowdownActiveSignatureDuration: number;
-  slowdownInactiveSignatureDuration: number;
-  billingPeriodMonths: number;
-}
-
-interface DashboardData {
-  serialNumber: string;
-  certificationId: string;
-  storageUsed: number;
-  storageCapacity: number;
-  numRegisteredClients: number;
-  createdSignatures: number;
-  numStartedTransactions: number;
-  softwareVersion: string;
-  productTypeUsage?: ProductTypeUsage;
-}
+import { DashboardData } from "@/types/types";
 
 
 

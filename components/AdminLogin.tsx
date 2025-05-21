@@ -18,12 +18,11 @@ const AdminLogin = () => {
     setIsLoading(true)
     setError("")
 
-    // Simulate API call
     setTimeout(() => {
-      if (username === "admin" && password === "admin") {
-        // Store authentication state
+      if (username === process.env.NEXT_PUBLIC_ADMIN_USERNAME && password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
+  
         localStorage.setItem("isAuthenticated", "true")
-        // Redirect to dashboard
+  
         router.push("/")
       } else {
         setError("Invalid username or password")
