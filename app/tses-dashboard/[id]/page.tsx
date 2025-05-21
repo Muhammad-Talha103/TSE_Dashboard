@@ -1,4 +1,4 @@
-
+import AuthWrapper from "@/app/admin-login/Auth-Wrapper";
 import Home from "./MainPage";
 
 interface Props {
@@ -27,9 +27,11 @@ const TSEPage = async ({ params }: Props) => {
   const tseData = await getTSEDetails(id); // 👈 Fetch data using the slug
 
   return (
-    <div className="p-6">
-      <Home data={tseData} />
-    </div>
+    <AuthWrapper>
+      <div className="p-6">
+        <Home data={tseData} />
+      </div>
+    </AuthWrapper>
   );
 };
 

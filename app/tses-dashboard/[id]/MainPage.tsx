@@ -23,67 +23,88 @@ import {
   FiClock,
   FiBarChart2,
   FiPieChart,
-  FiTrendingUp,
 } from "react-icons/fi";
 
-const COLORS = ["#3b82f6", "#10b981", "#f59e0b"];
 
-export default function Home({ data }: { data: any }) {
+interface ProductTypeUsage {
+  signatureLimit: number;
+  signaturesCurrentMonth: number;
+  signatureDuration: number;
+  slowdownActiveSignatureDuration: number;
+  slowdownInactiveSignatureDuration: number;
+  billingPeriodMonths: number;
+}
+
+interface DashboardData {
+  serialNumber: string;
+  certificationId: string;
+  storageUsed: number;
+  storageCapacity: number;
+  numRegisteredClients: number;
+  createdSignatures: number;
+  numStartedTransactions: number;
+  softwareVersion: string;
+  productTypeUsage?: ProductTypeUsage;
+}
+
+
+
+export default function Home({ data }: { data: DashboardData }) {
   return (
-    <div className="flex min-h-screen  w-full">
-      <main className="flex-1 p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="flex min-h-screen w-full bg-white">
+      <main className="flex-1 p-6 bg-gradient-to-br from-purple-50 to-indigo-50">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
+            <h1 className="text-[26px] font-bold text-indigo-700">
               Certification Dashboard
             </h1>
-            <p className="text-gray-500 mt-2 dark:text-gray-400">
-              TSE ID: <span className="text-[14px]">{data.serialNumber}</span>
+            <p className="text-indigo-600 mt-2 text-sm">
+              TSE ID: <span className="text-[14px] font-medium">{data.serialNumber}</span>
             </p>
-            <p className="text-gray-500 mt-2 dark:text-gray-400">
-              Certification ID: {data.certificationId}
+            <p className="text-indigo-600 mt-2 text-sm">
+              Certification ID: <span className="font-medium">{data.certificationId}</span>
             </p>
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
             <StatCard
               title="Storage Usage"
               value={`${data.storageUsed} `}
               total={`${data.storageCapacity} `}
               icon={<FiDatabase className="h-6 w-6" />}
-              color="bg-blue-500"
+              color="from-indigo-600 to-purple-600"
             />
 
             <StatCard
               title="Registered Clients"
               value={data.numRegisteredClients}
               icon={<FiUsers className="h-6 w-6" />}
-              color="bg-emerald-500"
+              color="from-indigo-600 to-purple-600"
             />
 
             <StatCard
               title="Signatures This Month"
-              value={data.productTypeUsage?.signaturesCurrentMonth}
+              value={data.productTypeUsage?.signaturesCurrentMonth ?? 0}
               total={`${data.productTypeUsage?.signatureLimit}`}
               icon={<FiFileText className="h-6 w-6" />}
-              color="bg-purple-500"
+              color="from-indigo-600 to-purple-600"
             />
 
             <StatCard
               title="Signature Duration"
               value={`${data.productTypeUsage?.signatureDuration}`}
               icon={<FiClock className="h-6 w-6" />}
-              color="bg-amber-500"
+              color="from-indigo-600 to-purple-600"
             />
           </div>
 
           {/* Charts */}
-          <div className="grid grid-cols-1  gap-6 mb-8">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+          <div className="grid grid-cols-1 gap-6 mb-8">
+            <div className="bg-white rounded-xl shadow-lg border border-indigo-100 p-6">
               <div className="flex items-center mb-4">
-                <FiPieChart className="h-5 w-5 text-emerald-500 mr-2" />
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
+                <FiPieChart className="h-5 w-5 text-purple-600 mr-2" />
+                <h2 className="text-xl font-semibold text-indigo-700">
                   Signature Metrics Overview
                 </h2>
               </div>
@@ -126,54 +147,65 @@ export default function Home({ data }: { data: any }) {
                         `${name}: ${(percent * 100).toFixed(0)}%`
                       }
                     >
-                      <Cell fill="#3b82f6" />
-                      <Cell fill="#10b981" />
-                      <Cell fill="#f59e0b" />
-                      <Cell fill="#ef4444" />
-                      <Cell fill="#8b5cf6" />
+                      <Cell fill="#6366F1" /> {/* indigo-500 */}
+                      <Cell fill="#818CF8" /> {/* indigo-400 */}
+                      <Cell fill="#A5B4FC" /> {/* indigo-300 */}
+                      <Cell fill="#C7D2FE" /> {/* indigo-200 */}
+                      <Cell fill="#E0E7FF" /> {/* indigo-100 */}
                     </Pie>
                     <Tooltip
                       formatter={(value, name) => [`${value}`, name]}
                       contentStyle={{
-                        backgroundColor: "#1F2937",
-                        borderColor: "#374151",
-                        color: "#F9FAFB",
+                        backgroundColor: "#ffffff",
+                        borderColor: "#E0E7FF",
+                        color: "#312E81",
+                        borderRadius: "0.5rem",
+                        boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+                      }}
+                    />
+                    <Legend 
+                      wrapperStyle={{
+                        paddingTop: "20px"
                       }}
                     />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
 
-              {/* 👇 Summary Below Chart */}
-              <div className=" text-sm text-gray-600 dark:text-gray-300 space-y-1 ">
+              {/* Summary Below Chart */}
+              <div className="text-sm text-indigo-700 space-y-1 mt-4">
                 <p>
-                  📄 <strong>Created Signatures:</strong>{" "}
-                  {data.createdSignatures}
+                  <span className="inline-block w-3 h-3 rounded-full bg-indigo-500 mr-2"></span>
+                  <strong>Created Signatures:</strong> {data.createdSignatures}
                 </p>
                 <p>
-                  📊 <strong>Signature Limit:</strong>{" "}
+                  <span className="inline-block w-3 h-3 rounded-full bg-indigo-400 mr-2"></span>
+                  <strong>Signature Limit:</strong>{" "}
                   {data.productTypeUsage?.signatureLimit}
                 </p>
                 <p>
-                  📅 <strong>Signatures This Month:</strong>{" "}
+                  <span className="inline-block w-3 h-3 rounded-full bg-indigo-300 mr-2"></span>
+                  <strong>Signatures This Month:</strong>{" "}
                   {data.productTypeUsage?.signaturesCurrentMonth}
                 </p>
                 <p>
-                  ⏱️ <strong>Slowdown Active:</strong>{" "}
+                  <span className="inline-block w-3 h-3 rounded-full bg-indigo-200 mr-2"></span>
+                  <strong>Slowdown Active:</strong>{" "}
                   {data.productTypeUsage?.slowdownActiveSignatureDuration}{" "}
                 </p>
                 <p>
-                  💤 <strong>Slowdown Inactive:</strong>{" "}
+                  <span className="inline-block w-3 h-3 rounded-full bg-indigo-100 mr-2"></span>
+                  <strong>Slowdown Inactive:</strong>{" "}
                   {data.productTypeUsage?.slowdownInactiveSignatureDuration}{" "}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
+          <div className="bg-white rounded-xl shadow-lg border border-indigo-100 p-6 mb-8">
             <div className="flex items-center mb-4">
-              <FiBarChart2 className="h-5 w-5 text-amber-500 mr-2" />
-              <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
+              <FiBarChart2 className="h-5 w-5 text-indigo-600 mr-2" />
+              <h2 className="text-xl font-semibold text-indigo-700">
                 Storage Overview
               </h2>
             </div>
@@ -190,33 +222,35 @@ export default function Home({ data }: { data: any }) {
                   ]}
                   margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                  <XAxis dataKey="name" stroke="#6B7280" />
-                  <YAxis stroke="#6B7280" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E0E7FF" />
+                  <XAxis dataKey="name" stroke="#4F46E5" />
+                  <YAxis stroke="#4F46E5" />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#1F2937",
-                      borderColor: "#374151",
-                      color: "#F9FAFB",
+                      backgroundColor: "#ffffff",
+                      borderColor: "#E0E7FF",
+                      color: "#312E81",
+                      borderRadius: "0.5rem",
+                      boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
                     }}
                   />
                   <Legend />
                   <Bar
                     dataKey="capacity"
                     name="Storage Capacity"
-                    fill="#3b82f6"
+                    fill="#4F46E5"
                     radius={[4, 4, 0, 0]}
                   />
                   <Bar
                     dataKey="used"
                     name="Used Storage"
-                    fill="#8b5cf6"
+                    fill="#6366F1"
                     radius={[4, 4, 0, 0]}
                   />
                   <Bar
                     dataKey="remaining"
                     name="Remaining Storage"
-                    fill="#10b981"
+                    fill="#A5B4FC"
                     radius={[4, 4, 0, 0]}
                   />
                 </BarChart>
@@ -225,24 +259,27 @@ export default function Home({ data }: { data: any }) {
           </div>
 
           {/* Summary Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             <MetricCard
               title="Started Transactions"
               value={data.numStartedTransactions}
               icon={<FiBarChart2 className="h-5 w-5" />}
-              color="text-blue-500"
+              color="text-indigo-700"
+              bgColor="bg-indigo-100"
             />
             <MetricCard
               title="Billing Period Months"
-              value={data.productTypeUsage?.billingPeriodMonths}
+              value={data.productTypeUsage?.billingPeriodMonths ?? 0}
               icon={<FiFileText className="h-5 w-5" />}
-              color="text-purple-500"
+              color="text-indigo-700"
+              bgColor="bg-indigo-100"
             />
             <MetricCard
               title="Software Version"
               value={data.softwareVersion}
               icon={<FiFileText className="h-5 w-5" />}
-              color="text-amber-500"
+              color="text-indigo-700"
+              bgColor="bg-indigo-100"
             />
           </div>
         </div>
@@ -269,35 +306,22 @@ function StatCard({
   color,
 }: StatCardProps) {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
-      <div className="flex justify-between items-start">
-        <div>
-          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
-            {title}
-          </p>
-          <p className="text-2xl font-bold text-gray-800 dark:text-white mt-1">
-            {value}
-          </p>
-          {total && (
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              of {total}
-            </p>
-          )}
-        </div>
-        <div className={`${color} p-3 rounded-lg text-white`}>{icon}</div>
-      </div>
-
+    <div className={`h-32 w-full bg-gradient-to-r ${color} text-white px-4 py-3 rounded-xl shadow-lg border flex flex-col gap-3 border-indigo-200 transition-transform duration-200 hover:scale-[1.02]`}>
+      <h2 className="text-sm font-semibold tracking-wide uppercase text-white opacity-90">
+        {title}
+      </h2>
+      <h4 className="text-2xl font-bold">{value}</h4>
+      {total && (
+        <p className="text-sm text-indigo-100">{total}</p>
+      )}
       {percentage !== undefined && (
-        <div className="mt-4">
-          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+        <div className="mt-1">
+          <div className="w-full bg-indigo-400 bg-opacity-30 rounded-full h-1.5">
             <div
-              className={`h-2.5 rounded-full ${color}`}
+              className="h-1.5 rounded-full bg-white"
               style={{ width: `${percentage}%` }}
             ></div>
           </div>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-            {percentage.toFixed(0)}% used
-          </p>
         </div>
       )}
     </div>
@@ -309,18 +333,19 @@ interface MetricCardProps {
   value: string | number;
   icon: React.ReactNode;
   color: string;
+  bgColor?: string;
 }
 
-function MetricCard({ title, value, icon, color }: MetricCardProps) {
+function MetricCard({ title, value, icon, color, bgColor = "bg-indigo-100" }: MetricCardProps) {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+    <div className="bg-white rounded-xl shadow-lg border border-indigo-100 p-6 transition-all hover:shadow-md">
       <div className="flex items-center mb-2">
-        <div className={`${color} mr-2`}>{icon}</div>
-        <h3 className="text-lg font-medium text-gray-800 dark:text-white">
+        <div className={`${bgColor} p-2 rounded-lg mr-3 ${color}`}>{icon}</div>
+        <h3 className="text-lg font-medium text-indigo-700">
           {title}
         </h3>
       </div>
-      <p className="text-3xl font-bold text-gray-800 dark:text-white">
+      <p className="text-3xl font-bold text-indigo-700">
         {value.toLocaleString()}
       </p>
     </div>
