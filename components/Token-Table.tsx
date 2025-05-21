@@ -9,8 +9,8 @@ import {
   MdVerified,
 } from "react-icons/md";
 import Link from "next/link";
-import type { Token } from "@/types/types";
 import { getStatusBadge } from "@/utils/functions-Helper";
+import type { Token } from "@/types/types";
 
 const poppins = Poppins({
   weight: ["400", "600", "700"],

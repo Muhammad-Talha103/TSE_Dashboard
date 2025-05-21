@@ -5,7 +5,7 @@ import {
 } from "@/utils/lib";
 import React from "react";
 import StorageSpeedometer from "./StorageDetails";
-import {Token , TSEDetail , TSEData , StorageMetrics , Stat} from "@/types/dashboard";
+import {Token  , TSEData , StorageMetrics , Stat} from "@/types/dashboard";
 
 
 const Dashboard_Overview: React.FC = async () => {
